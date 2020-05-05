@@ -2,23 +2,26 @@ version: '3'
 services:
 
   db:
-    image: mysql:5.7.22
+    image: mysql:8.0
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: mydatabase
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
+    ports:
+      - 3307:3306
     volumes:
       - ./db/mysql_data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: database
 
   app:
     build: .
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: user
+      MYSQL_USER: username
       MYSQL_PASSWORD: password
-      MYSQL_DATABASE: database
+      MYSQL_DATABASE: mydatabase
       MYSQL_HOST: db
     volumes:
       - ".:/rails"

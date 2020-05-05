@@ -1,4 +1,4 @@
-FROM ruby:2.5.5
+FROM ruby:2.5-alpine
 
 ENV LANG C.UTF-8
 
@@ -9,10 +9,8 @@ WORKDIR /rails
 COPY Gemfile Gemfile
 COPY Gemfile.lock Gemfile.lock
 
-RUN gem install bundler && bundle install --clean
-
+RUN gem install bundler && bundle install
 RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+RUN mkdir -p tmp/sockets
 
 ADD . /rails
-
-RUN mkdir -p tmp/sockets
